@@ -28,6 +28,12 @@ def train(model, device, train_set_loader, optimizer, epoch, logging_interval=10
                 epoch, batch_idx * len(data), len(train_set_loader.dataset),
                 100. * batch_idx / len(train_set_loader), loss.item(),
                 100. * correct))
+
+def train_epochs(model, device, train_set_loader, test_set_loader, epochs, lr=0.1, lr_decay=0.5, momentum=0.5):
+    for e in range(1, epochs+1):
+        optimizer = optim.SGD(model.parameters(), lr=lr* (e * lr_decay), momentum=momentum)
+        train(model, device, train_set_loader, optimizer, e, logging_interval=10)
+        test(model, device, test_set_loader)
             
 def train_many_epochs(model, device, train_set_loader, test_set_loader):
     epoch = 1
